@@ -6,14 +6,15 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 23:18:43 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/08/11 23:30:29 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/13 20:54:24 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <termios.h>
 #include <unistd.h>
+#include <termios.h>
 
-#include "ft/ft_exit.h"
+#include "ft_io.h"
+#include "ft_exit.h"
 
 struct termios	g_original_termios;
 
@@ -45,6 +46,18 @@ int	main(void)
 
 	enable_raw_mode();
 	while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q')
-		;
+	{
+		if (32 <= c && c <= 126)
+		{
+			ft_write(STDOUT_FILENO, &c, 1);
+		}
+		else
+		{
+			ft_puts(STDOUT_FILENO, "(");
+			ft_putn(STDOUT_FILENO, (int)*((unsigned char *)&c));
+			ft_puts(STDOUT_FILENO, ")");
+		}
+		ft_puts(STDOUT_FILENO, "\n");
+	}
 	return (ft_exit(0));
 }
